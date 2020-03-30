@@ -1,4 +1,9 @@
+from setup import obs_move_line
 
+lane=1
+x=20
+y=10
+v=1
+x,y=obs_move_line(lane, v, x, y)
 
-plot_x_curv=[1,2,3,4]
-print(min(plot_x_curv, key=lambda i:abs(i-2.6)))
+print(x,y)

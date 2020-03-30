@@ -15,14 +15,14 @@ yref=get_y_from_lane(yref_num_line,xref)
 (v_init, w_init) = (0, 0)
 # -------Init Obstacles
 penalty_margin=0.3
-(X_OBS,Y_LANE_OBS, THETA_OBS, R_OBS) = ([15,25],[1,2] ,[math.pi,math.pi], [0.26,0.26])
+(X_OBS,Y_LANE_OBS, THETA_OBS, R_OBS) = ([30,20],[2,1] ,[math.pi,math.pi], [0.26,0.26])
 Y_OBS=[get_y_from_lane(Y_LANE_OBS[0],X_OBS[0]),get_y_from_lane(Y_LANE_OBS[1],X_OBS[1])]
-(V_OBS, W_OBS) = ([0.1,-0.1], [0,0])
+(V_OBS) = ([-0.1,0])
 # -------Init static stuff
 R_CONE=[j+r+penalty_margin for j in R_OBS]
 NOW_POS_OBS=[X_OBS,Y_OBS]
 LAST_POS_OBS=NOW_POS_OBS.copy()
-fig = plt.figure()
+fig = plt.figure(figsize=(10,5))
 ax = fig.add_subplot(1, 1, 1)
 u_star = [0.0] * (nu*N)
 yref_radius=road_radius_frm_lane(yref_num_line)
@@ -115,7 +115,6 @@ while i<200:
     justChanged = False
     for j in range(len(X_OBS)):
         (X_OBS[j], Y_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j])
-        # (X_OBS[j], Y_OBS[j], THETA_OBS[j]) = model_dd(X_OBS[j], Y_OBS[j], THETA_OBS[j], V_OBS[j], W_OBS[j])
     NOW_POS_OBS=(X_OBS,Y_OBS)
     try:
         u_star = solution['solution']
@@ -149,7 +148,8 @@ while i<200:
             Y_OBS_FUTURE[j]=Y_OBS_FUTURE[j] + ts*np.sin(THETA_OBS[j])*V_OBS_EST[j]
             #get_cone_const(X[t+1],Y[t+1],THETA[t+1],x_obs_future,y_obs_future,u_t[0])
             if np.sqrt(np.power(X[t+1]-X_OBS_FUTURE[j],2)+np.power(Y[t+1]-Y_OBS_FUTURE[j],2)) <= (R_OBS[j]+r):
-                if u_t[0]>=V_OBS_EST[j] or True:
+                if u_t[0]>=V_OBS_EST[j]:
+                    print('collision, hej')
                     collision = True
     # test
     # (x,xkm1,x_obs,y,ykm1,y_obs)=(X[1],X[0],X_OBS[0],Y[1],Y[0],Y_OBS[0])

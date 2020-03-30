@@ -5,20 +5,18 @@ import numpy as np
 
 
 def lane_keeping(lane_cost, y,x,actv_lane,yref,ACTIVATE_CONE):
-    global lane_border_min,lane_border_max,lane_offset_y,lane_offset_x
+    global lane_border_min,lane_border_max,lane_offset_y,lane_offset_x,center_of_road,lane1,lane2
     # border constraint
     radius_ego=cs.sqrt((x-lane_offset_x)**2+(y+(lane_border_min-lane_offset_y))**2)
-    passed_ymin=cs.if_else(radius_ego<lane_border_min,True,False)
-    passed_ymax=cs.if_else(radius_ego>lane_border_max,True,False)
-    lane_cost += cs.if_else(passed_ymin,1000*(radius_ego-lane_border_min)**2,0)
-    lane_cost += cs.if_else(passed_ymax,1000*(radius_ego-lane_border_max)**2,0)
-    # lane keeping constraint
-    line_slope=1000
-    lane_cost+=cs.fmax(0.0,-line_slope*cs.sqrt((lane_border_min-radius_ego)**2)+(line_slope/4))
-    lane_cost+=cs.fmax(0.0,-line_slope*cs.sqrt((lane_border_max-radius_ego)**2)+(line_slope/4))
+    # Googla x^3 så ser du att den börjar öka vid ca 5-10.
+    # multiplicera dist_ymin med 10 så börjar den vid 0.5-1 ist
+    dist_ymin=(lane1-radius_ego)*12 
+    dist_ymax=(radius_ego-lane2)*12  
+    lane_cost+=cs.fmax(0.1,dist_ymin**3+10*dist_ymin)
+    lane_cost+=cs.fmax(0.1,dist_ymax**3+10*dist_ymax)
     # active lane keeping constraint
     activate_lane_keep=cs.logic_and(ACTIVATE_CONE[0],ACTIVATE_CONE[1])
-    lane_cost += cs.if_else(activate_lane_keep,500*(radius_ego-actv_lane)**2,400*(radius_ego-101)**2)
+    lane_cost += cs.if_else(activate_lane_keep,500*(radius_ego-actv_lane)**2,0*(radius_ego-center_of_road)**2) #TODO
     return lane_cost
 
 
@@ -31,20 +29,20 @@ def cone_constraint(c, x_obs, y_obs,theta_obs, v_obs, r_obs, uk, x, y, theta, ob
     lterm = (cs.cos(theta)*uk[0]-v_obs_x)**2+(cs.sin(theta)*uk[0]-v_obs_y)**2
     # -------distance const
     # c += cs.fmax(0.0, r_obs - (x_obs-x)**2 - (y_obs-y)**2)
-    # -------regular cone
-    #c += cs.fmax(0.0, r_obs**2*lterm-(rterm*lterm-uterm**2))
     # ------- cone with activation and deactivation constraints
     cone = r_obs**2*lterm-(rterm*lterm-uterm**2)
-    passed_obs=cs.if_else((obs_dist-ego_dist)>0 ,True,False)
-    obs_faster_than_ego=cs.if_else(uk[0]<v_obs ,True,False) 
-    obs_driving_towards=cs.if_else(cs.norm_2(theta-theta_obs)>=(cs.pi/2),True,False)
+    passed_obs=cs.if_else(obs_dist>ego_dist ,True,False)
+    obs_faster_than_ego=cs.if_else(uk[0]<cs.norm_2(v_obs) ,True,False) 
+    obs_driving_towards=cs.if_else(passed_obs,False,cs.if_else(v_obs<=0,True,False))
     skip_due_to_dir_and_vel=cs.if_else(obs_driving_towards,False,cs.if_else(obs_faster_than_ego,True,False))
-    deactivate_activate_cone=cs.if_else(passed_obs,True,cs.if_else(skip_due_to_dir_and_vel,True,False))
+    skip_due_far_away=cs.if_else(cs.sqrt((x_obs-x)**2 - (y_obs-y)**2)<10,False,True)
+    skip=cs.logic_or(skip_due_to_dir_and_vel,skip_due_far_away)
+    deactivate_activate_cone=cs.if_else(passed_obs,True,skip)
     c += cs.fmax(0.0, cs.if_else(deactivate_activate_cone,0,cs.fmax(0.0, cone)))
     # decide what side to drive
     # side_obs =cs.sign((x_obs-xkm1)*(yref-ykm1)-(y_obs-ykm1)*(xref-xkm1)) # neg if on left
     # s=cs.sign((x-xkm1)*(y_obs-ykm1)-(y-ykm1)*(x_obs-xkm1)) # neg if on left
-    # #c +=cs.fmax(0.0,s*5)
+    # c +=cs.fmax(0.0,s*5)
     return c,deactivate_activate_cone
 
 
@@ -60,8 +58,7 @@ def build_opt():
     c = 0
     for t in range(0, nu*N, nu):
         uk = u[t:t+2]
-        stage_cost += Qx*(x-xref)**2 + Qy*(y-yref)**2 + \
-            Qtheta*(theta-thetaref)**2
+        stage_cost += Qx*(x-xref)**2 + Qy*(y-yref)**2 +  Qtheta*(theta-thetaref)**2
         stage_cost += Rv*uk[0]**2+Rw*uk[1]**2
         (xkm1,ykm1)=(x,y)
         (x, y, theta) = model_dd(x, y, theta, uk[0], uk[1])
@@ -69,7 +66,6 @@ def build_opt():
         for j in range(len(X_OBS)):
             # obstacles handeling
             (X_OBS[j], Y_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j])
-            # (X_OBS[j], Y_OBS[j], THETA_OBS[j]) = model_dd(X_OBS[j], Y_OBS[j], THETA_OBS[j], V_OBS[j], W_OBS[j])
             ego_dist = cs.sqrt((x-xref)**2+(y-yref)**2)
             obs_dist = cs.sqrt((X_OBS[j]-xref)**2+(Y_OBS[j]-yref)**2)
             c ,cone_deactivated= cone_constraint(c, X_OBS[j], Y_OBS[j],THETA_OBS[j], V_OBS[j], R_OBS[j], uk, x, y, theta, obs_dist,ego_dist,xkm1,ykm1,xref,yref)
@@ -100,9 +96,8 @@ def build_opt():
     set_c = og.constraints.Zero()
     set_y = og.constraints.BallInf(None, 1e12)
     bounds = og.constraints.Rectangle(umin, umax)
-    C = cs.vertcat(dv_c, dw_c)
-    problem = og.builder.Problem(u, p, total_cost).with_penalty_constraints(
-        C).with_constraints(bounds).with_aug_lagrangian_constraints(c, set_c, set_y)
+    lag_const=cs.vertcat(dv_c, dw_c,c)
+    problem = og.builder.Problem(u, p, total_cost).with_constraints(bounds).with_aug_lagrangian_constraints(lag_const, set_c, set_y)
 
     build_config = og.config.BuildConfiguration()\
         .with_build_directory("optimizers")\
@@ -114,7 +109,7 @@ def build_opt():
         .with_optimizer_name("ref_point")
     update_pen = 2
     init_pen = 100
-    num_out_pen = 5
+    num_out_pen = 6
 
     solver_config = og.config.SolverConfiguration()\
         .with_tolerance(1e-9)\
@@ -142,3 +137,4 @@ if __name__ == '__main__':
         h = h*update_pen
     print('[MAXIMUM PENALTY]', h)
     import run_opt
+#obs_driving_towards=cs.if_else(cs.norm_2(theta-theta_obs)>=(cs.pi/2),True,False)

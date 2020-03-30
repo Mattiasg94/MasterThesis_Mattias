@@ -11,7 +11,7 @@
 //! This file is part of OptimizationEngine
 //! (see https://alphaville.github.io/optimization-engine/)
 //!
-//! Generated at: 2020-03-27 14:24:57.798847
+//! Generated at: 2020-03-30 13:12:47.724257
 //!
 
 // #![no_std]
@@ -23,10 +23,10 @@ const NUM_STATIC_PARAMETERS: usize = 21;
 const NUM_DECISION_VARIABLES: usize = 24;
 
 /// Number of ALM-type constraints (dimension of F1, i.e., n1)
-const NUM_CONSTRAINTS_TYPE_ALM: usize = 1;
+const NUM_CONSTRAINTS_TYPE_ALM: usize = 4;
 
 /// Number of penalty constraints (dimension of F2, i.e., n2)
-const NUM_CONSTRAINTS_TYPE_PENALTY: usize = 3;
+const NUM_CONSTRAINTS_TYPE_PENALTY: usize = 0;
 
 use libc::{c_double, c_int};  // might need to include: c_longlong, c_void
 

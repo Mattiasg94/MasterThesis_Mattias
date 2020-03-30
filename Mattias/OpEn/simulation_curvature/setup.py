@@ -25,12 +25,13 @@ warm_start = False
 #---- plot
 linewidth = 1
 lines = 3  # number of lines drawn
-road_radius = 100
+road_radius = 1000
 lane_offset_y = 2
-lenght = 40
+lenght = 50
 lane_offset_x = lenght/2
 lane_border_min = road_radius
 lane_border_max = road_radius+linewidth*lines
+center_of_road=lane_border_min+linewidth # TODO what if 4 lines?
 lane1 = lane_border_min+(linewidth/2)
 lane2 = lane1+linewidth
 # ----- Methods
@@ -45,6 +46,7 @@ def model_dd(x, y, theta, v, w):
 
 def obs_move_line(lane, v, x, y):
     global ts
+    v=-v
     radius=road_radius_frm_lane(lane)
     x_displaced = x-lane_offset_x
     y_displaced = y+(lane_border_min-lane_offset_y)

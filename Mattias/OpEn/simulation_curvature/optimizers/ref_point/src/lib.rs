@@ -2,7 +2,7 @@
 // Auto-generated file by OptimizationEngine
 // See https://alphaville.github.io/optimization-engine/
 //
-// Generated at: 2020-03-27 14:24:58.005298
+// Generated at: 2020-03-30 13:12:47.920629
 //
 
 use icasadi;
@@ -30,7 +30,7 @@ const LBFGS_MEMORY: usize = 10;
 const MAX_INNER_ITERATIONS: usize = 500;
 
 /// Maximum number of outer iterations
-const MAX_OUTER_ITERATIONS: usize = 5;
+const MAX_OUTER_ITERATIONS: usize = 6;
 
 /// Maximum execution duration in microseconds
 const MAX_DURATION_MICROS: u64 = 5000000;
@@ -54,10 +54,10 @@ pub const REF_POINT_NUM_DECISION_VARIABLES: usize = 24;
 pub const REF_POINT_NUM_PARAMETERS: usize = 21;
 
 /// Number of parameters associated with augmented Lagrangian
-pub const REF_POINT_N1: usize = 1;
+pub const REF_POINT_N1: usize = 4;
 
 /// Number of penalty constraints
-pub const REF_POINT_N2: usize = 3;
+pub const REF_POINT_N2: usize = 0;
 
 
 
@@ -145,10 +145,7 @@ pub fn solve(
         icasadi::mapping_f1(&u, &p, res);
         Ok(())
     };
-    let f2 = |u: &[f64], res: &mut [f64]| -> Result<(), SolverError> {
-        icasadi::mapping_f2(&u, &p, res);
-        Ok(())
-    };let bounds = make_constraints();
+    let bounds = make_constraints();
 
     let set_y = make_set_y();
     let set_c = make_set_c();
@@ -159,7 +156,7 @@ pub fn solve(
         psi,
         grad_psi,
         Some(f1),
-        Some(f2),
+        NO_MAPPING,
         REF_POINT_N1,
         REF_POINT_N2,
     );
