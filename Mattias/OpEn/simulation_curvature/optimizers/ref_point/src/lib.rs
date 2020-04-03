@@ -2,7 +2,7 @@
 // Auto-generated file by OptimizationEngine
 // See https://alphaville.github.io/optimization-engine/
 //
-// Generated at: 2020-03-30 13:12:47.920629
+// Generated at: 2020-04-02 12:03:37.404820
 //
 
 use icasadi;
@@ -30,7 +30,7 @@ const LBFGS_MEMORY: usize = 10;
 const MAX_INNER_ITERATIONS: usize = 500;
 
 /// Maximum number of outer iterations
-const MAX_OUTER_ITERATIONS: usize = 6;
+const MAX_OUTER_ITERATIONS: usize = 5;
 
 /// Maximum execution duration in microseconds
 const MAX_DURATION_MICROS: u64 = 5000000;
@@ -48,7 +48,7 @@ const SUFFICIENT_INFEASIBILITY_DECREASE_COEFFICIENT: f64 = 0.7;
 // ---Public Constants-----------------------------------------------------------------------------------
 
 /// Number of decision variables
-pub const REF_POINT_NUM_DECISION_VARIABLES: usize = 24;
+pub const REF_POINT_NUM_DECISION_VARIABLES: usize = 30;
 
 /// Number of parameters
 pub const REF_POINT_NUM_PARAMETERS: usize = 21;
@@ -63,8 +63,8 @@ pub const REF_POINT_N2: usize = 0;
 
 // ---Parameters of the constraints----------------------------------------------------------------------
 
-const CONSTRAINTS_XMIN :Option<&[f64]> = Some(&[0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,0.0,-3.0,]);
-const CONSTRAINTS_XMAX :Option<&[f64]> = Some(&[0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,]);
+const CONSTRAINTS_XMIN :Option<&[f64]> = Some(&[0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,0.01,-3.0,]);
+const CONSTRAINTS_XMAX :Option<&[f64]> = Some(&[0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,0.5,3.0,]);
 
 
 

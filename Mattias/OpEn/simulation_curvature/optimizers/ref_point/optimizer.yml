@@ -2,11 +2,11 @@ _comment: auto-generated file; do not modify
 build:
   build_dir: optimizers
   build_mode: debug
-  cost_function_name: phi_qeqKNsdBNUdBraFLffyX
-  grad_function_name: grad_phi_qeqKNsdBNUdBraFLffyX
-  id: qeqKNsdBNUdBraFLffyX
-  mapping_f1: mapping_f1_qeqKNsdBNUdBraFLffyX
-  mapping_f2: mapping_f2_qeqKNsdBNUdBraFLffyX
+  cost_function_name: phi_rkfGkYuDlqZlmstrktdp
+  grad_function_name: grad_phi_rkfGkYuDlqZlmstrktdp
+  id: rkfGkYuDlqZlmstrktdp
+  mapping_f1: mapping_f1_rkfGkYuDlqZlmstrktdp
+  mapping_f2: mapping_f2_rkfGkYuDlqZlmstrktdp
   open_version: null
   target_system: null
 meta:
@@ -20,7 +20,7 @@ solver:
   lbfgs_memory: 10
   max_duration_micros: 5000000
   max_inner_iterations: 500
-  max_outer_iterations: 6
+  max_outer_iterations: 5
   penalty_weight_update_factor: 2.0
   tolerance: 1.0e-09
 tcp:
