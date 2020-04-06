@@ -2,7 +2,7 @@
 // Auto-generated file by OptimizationEngine
 // See https://alphaville.github.io/optimization-engine/
 //
-// Generated at: 2020-04-04 16:40:35.534433
+// Generated at: 2020-04-06 12:16:06.555979
 //
 
 use icasadi;

@@ -47,27 +47,42 @@ lane2 = lane1+linewidth
 center=[lane_offset_x,lane_offset_y-lane_border_min]
 # ----- Methods
 
-def get_omega_ego(v,x,y,th):
+def get_tangent_vel(v,x,y,th):
     vx= v*cs.cos(th)
     vy= v*cs.sin(th)
     v = cs.vertcat(-vx,-vy)
     p= cs.vertcat(x-center[0],y-center[1])
     b_hat=p/cs.norm_2(p)
     vb=cs.dot(v,b_hat)
-    w=cs.norm_2(v)-cs.sqrt(vb**2)
-    return w
+    v_tan=(cs.norm_2(v)-cs.sqrt(vb**2))
+    return v_tan
 
-def get_intersection_point(x,y,w,x_obs,y_obs,w_obs):
-    # get arc length
+def get_intersection_time(x,y,v,x_obs,y_obs,v_obs):
+    v_obs=-v_obs
     (x,y)=(x-center[0],y-center[1])
     (x_obs,y_obs)=(x_obs-center[0],y_obs-center[1])
     th_ego=cs.atan2(y,x)
     th_obs=cs.atan2(y_obs,x_obs)
     th=cs.sqrt((th_obs-th_ego)**2)
     arc=center_of_road*th
-    t_impact=arc/(w+w_obs)
-    arc_impact=t_impact*w_obs
-    return arc
+    t_impact=arc/(v+v_obs)
+    return t_impact
+
+def obs_move_line(lane, v, x, y,theta,dt): #TODO update theta at init
+    v = -v
+    radius = road_radius_frm_lane(lane)
+    x_displaced = x-center[0]
+    y_displaced = y-center[1]
+    curr_th = np.arccos(x_displaced/(np.linalg.norm([x_displaced, y_displaced])))
+    d = dt*v
+    th_new = curr_th+d/radius
+    x_displaced = radius*np.cos(th_new)
+    y_displaced = radius*np.sin(th_new)
+    x = x_displaced+center[0]
+    y = y_displaced+center[1]
+    theta=th_new
+    w=(th_new-curr_th)/dt #TODO which is the right way?
+    return x, y,theta,w
 
 def check_converged(X,Y,avrage_curve_fit_error,x_init,y_init,xref,yref):
     xdata=np.array(X) #TODO if close to ref not working (deactivate)
@@ -104,23 +119,6 @@ def model_dd(x, y, theta, v, w):
     y += ts*cs.sin(theta)*v
     theta += ts*w
     return x, y, theta
-
-def obs_move_line(lane, v, x, y,theta,dt): #TODO update theta at init
-    v = -v
-    radius = road_radius_frm_lane(lane)
-    x_displaced = x-center[0]
-    y_displaced = y-center[1]
-    curr_th = np.arccos(x_displaced/(np.linalg.norm([x_displaced, y_displaced])))
-    d = dt*v
-    th_new = curr_th+d/radius
-    x_displaced = radius*np.cos(th_new)
-    y_displaced = radius*np.sin(th_new)
-    x = x_displaced+center[0]
-    y = y_displaced+center[1]
-    theta=th_new
-    w=(th_new-curr_th)/dt #TODO which is the right way?
-    return x, y,theta,w
-
 
 def get_curvature_plots():
     global linewidth, lines, lane_offset_y, lenght

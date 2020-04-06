@@ -22,7 +22,7 @@
  *   + n1: 4
  *   + n2: 0
  *
- * Generated at: 2020-04-04 16:40:35.437129
+ * Generated at: 2020-04-06 12:16:06.453984
  *
  */
 #include <stdlib.h>
@@ -57,7 +57,7 @@
 /*
  * CasADi interface for the cost function
  */
-extern int phi_TmoXKIaPNAObAstKPQng(
+extern int phi_kNOfvhNrPYRgVJVAVcCp(
     const casadi_real** arg, 
     casadi_real** res, 
     casadi_int* iw, 
@@ -67,7 +67,7 @@ extern int phi_TmoXKIaPNAObAstKPQng(
 /*
  * CasADi interface for the gradient of the cost
  */
-extern int grad_phi_TmoXKIaPNAObAstKPQng(
+extern int grad_phi_kNOfvhNrPYRgVJVAVcCp(
     const casadi_real** arg, 
     casadi_real** res, 
     casadi_int* iw, 
@@ -77,7 +77,7 @@ extern int grad_phi_TmoXKIaPNAObAstKPQng(
 /*
  * CasADi interface for the gradient of mapping F1
  */
-extern int mapping_f1_TmoXKIaPNAObAstKPQng(
+extern int mapping_f1_kNOfvhNrPYRgVJVAVcCp(
     const casadi_real** arg, 
     casadi_real** res, 
     casadi_int* iw, 
@@ -87,7 +87,7 @@ extern int mapping_f1_TmoXKIaPNAObAstKPQng(
 /*
  * CasADi interface for the gradient of mapping F2
  */
-extern int mapping_f2_TmoXKIaPNAObAstKPQng(
+extern int mapping_f2_kNOfvhNrPYRgVJVAVcCp(
     const casadi_real** arg, 
     casadi_real** res, 
     casadi_int* iw, 
@@ -231,7 +231,7 @@ int cost_function_ref_point(const casadi_real** arg, casadi_real** res) {
     copy_args_into_uxip_space(arg);
 
     result_space_cost[0] = res[0];
-    return phi_TmoXKIaPNAObAstKPQng(
+    return phi_kNOfvhNrPYRgVJVAVcCp(
         args__,
         result_space_cost,
         allocated_i_workspace_cost,
@@ -249,7 +249,7 @@ int grad_cost_function_ref_point(const casadi_real** arg, casadi_real** res) {
               uxip_space + NU_REF_POINT + NXI_REF_POINT};  /* :p   */
     copy_args_into_uxip_space(arg);
     result_space_grad[0] = res[0];
-    return grad_phi_TmoXKIaPNAObAstKPQng(
+    return grad_phi_kNOfvhNrPYRgVJVAVcCp(
         args__,
         result_space_grad,
         allocated_i_workspace_grad,
@@ -273,10 +273,10 @@ int mapping_f1_function_ref_point(const casadi_real** arg, casadi_real** res) {
      */
     result_space_f1[0] = res[0];
     /*
-     * Call auto-generated function mapping_f1_TmoXKIaPNAObAstKPQng
+     * Call auto-generated function mapping_f1_kNOfvhNrPYRgVJVAVcCp
      * Implemented in: icasadi/extern/auto_casadi_mapping_f1.c
      */
-    return mapping_f1_TmoXKIaPNAObAstKPQng(
+    return mapping_f1_kNOfvhNrPYRgVJVAVcCp(
         args__,
         result_space_f1,
         allocated_i_workspace_f1,
@@ -300,10 +300,10 @@ int mapping_f2_function_ref_point(const casadi_real** arg, casadi_real** res) {
      */
     result_space_f2[0] = res[0];
     /*
-     * Call auto-generated function mapping_f2_TmoXKIaPNAObAstKPQng
+     * Call auto-generated function mapping_f2_kNOfvhNrPYRgVJVAVcCp
      * Implemented in: icasadi/extern/auto_casadi_mapping_f2.c
      */
-    return mapping_f2_TmoXKIaPNAObAstKPQng(
+    return mapping_f2_kNOfvhNrPYRgVJVAVcCp(
         args__,
         result_space_f2,
         allocated_i_workspace_f2,
