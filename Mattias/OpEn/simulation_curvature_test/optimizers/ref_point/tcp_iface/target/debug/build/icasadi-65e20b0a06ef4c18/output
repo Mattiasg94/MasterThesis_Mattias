@@ -1,0 +1,115 @@
+TARGET = Some("x86_64-pc-windows-msvc")
+OPT_LEVEL = Some("0")
+HOST = Some("x86_64-pc-windows-msvc")
+CC_x86_64-pc-windows-msvc = None
+CC_x86_64_pc_windows_msvc = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-pc-windows-msvc = None
+CFLAGS_x86_64_pc_windows_msvc = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+DEBUG = Some("true")
+CC_x86_64-pc-windows-msvc = None
+CC_x86_64_pc_windows_msvc = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-pc-windows-msvc = None
+CFLAGS_x86_64_pc_windows_msvc = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+CC_x86_64-pc-windows-msvc = None
+CC_x86_64_pc_windows_msvc = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-pc-windows-msvc = None
+CFLAGS_x86_64_pc_windows_msvc = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+CC_x86_64-pc-windows-msvc = None
+CC_x86_64_pc_windows_msvc = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-pc-windows-msvc = None
+CFLAGS_x86_64_pc_windows_msvc = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+CC_x86_64-pc-windows-msvc = None
+CC_x86_64_pc_windows_msvc = None
+HOST_CC = None
+CC = None
+CFLAGS_x86_64-pc-windows-msvc = None
+CFLAGS_x86_64_pc_windows_msvc = None
+HOST_CFLAGS = None
+CFLAGS = None
+CRATE_CC_NO_DEFAULTS = None
+CARGO_CFG_TARGET_FEATURE = Some("fxsr,sse,sse2")
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_cost.o" "-c" "extern/auto_casadi_cost.c"
+auto_casadi_cost.c
+C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt\corecrt.h(212): warning C4668: '__cplusplus' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_cost.c(54): warning C4668: '__STDC_VERSION__' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_cost.c(67): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(67): warning C4100: 'w': unreferenced formal parameter
+extern/auto_casadi_cost.c(67): warning C4100: 'iw': unreferenced formal parameter
+extern/auto_casadi_cost.c(3550): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(3554): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(3561): warning C4100: 'mem': unreferenced formal parameter
+exit code: 0
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_grad.o" "-c" "extern/auto_casadi_grad.c"
+auto_casadi_grad.c
+C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt\corecrt.h(212): warning C4668: '__cplusplus' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_grad.c(54): warning C4668: '__STDC_VERSION__' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_grad.c(68): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(68): warning C4100: 'w': unreferenced formal parameter
+extern/auto_casadi_grad.c(68): warning C4100: 'iw': unreferenced formal parameter
+extern/auto_casadi_grad.c(6570): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(6574): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(6581): warning C4100: 'mem': unreferenced formal parameter
+exit code: 0
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_mapping_f2.o" "-c" "extern/auto_casadi_mapping_f2.c"
+auto_casadi_mapping_f2.c
+C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt\corecrt.h(212): warning C4668: '__cplusplus' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_mapping_f2.c(52): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(52): warning C4100: 'w': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(52): warning C4100: 'iw': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(52): warning C4100: 'arg': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(67): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(71): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f2.c(78): warning C4100: 'mem': unreferenced formal parameter
+exit code: 0
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_mapping_f1.o" "-c" "extern/auto_casadi_mapping_f1.c"
+auto_casadi_mapping_f1.c
+C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt\corecrt.h(212): warning C4668: '__cplusplus' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_mapping_f1.c(51): warning C4668: '__STDC_VERSION__' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+extern/auto_casadi_mapping_f1.c(65): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(65): warning C4100: 'w': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(65): warning C4100: 'iw': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(2880): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(2884): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(2891): warning C4100: 'mem': unreferenced formal parameter
+exit code: 0
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/interface.o" "-c" "extern/interface.c"
+interface.c
+C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt\corecrt.h(212): warning C4668: '__cplusplus' is not defined as a preprocessor macro, replacing with '0' for '#if/#elif'
+exit code: 0
+AR_x86_64-pc-windows-msvc = None
+AR_x86_64_pc_windows_msvc = None
+HOST_AR = None
+AR = None
+running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\lib.exe" "-out:c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\libicasadi.a" "-nologo" "c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_cost.o" "c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_grad.o" "c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_mapping_f2.o" "c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_mapping_f1.o" "c:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/interface.o"
+exit code: 0
+cargo:rustc-link-lib=static=icasadi
+cargo:rustc-link-search=native=c:\Skola\MasterThesis\Master-Thesis\Mattias\OpEn\simulation_curvature_test\optimizers\ref_point\tcp_iface\target\debug\build\icasadi-65e20b0a06ef4c18\out
+cargo:rerun-if-changed=extern/auto_casadi_cost.c
+cargo:rerun-if-changed=extern/auto_casadi_grad.c
+cargo:rerun-if-changed=extern/auto_casadi_mapping_f2.c
+cargo:rerun-if-changed=extern/auto_casadi_mapping_f1.c
+cargo:rerun-if-changed=extern/interface.c
