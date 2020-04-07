@@ -37,7 +37,7 @@ def build_opt():
             ego_dist = cs.sqrt((x_traj[i]-xref)**2+(y_traj[i]-yref)**2)
             obs_dist = cs.sqrt((X_OBS[j]-xref)**2+(Y_OBS[j]-yref)**2)
             passed_obs=cs.if_else(obs_dist>ego_dist ,True,False)
-            (X_OBS[j], Y_OBS[j],THETA_OBS[j],W_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],ts) #TOD does cone know about w_obs?
+            (X_OBS[j], Y_OBS[j],THETA_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],ts) #TOD does cone know about w_obs?
             c = cone_constraint(c,X_OBS[j], Y_OBS[j],THETA_OBS[j], V_OBS[j], R_CONE[j], vk, x_traj[i], y_traj[i], theta_traj[i],passed_obs)
 
     total_cost = stage_cost

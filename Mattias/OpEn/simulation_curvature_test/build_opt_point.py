@@ -5,9 +5,8 @@ import numpy as np
 
 
 def lane_keeping(lane_cost, y,x,actv_lane,yref,ACTIVATE_CONE):
-    global lane_border_min,lane_border_max,lane_offset_y,lane_offset_x,center_of_road,lane1,lane2
     # border constraint
-    radius_ego=cs.sqrt((x-lane_offset_x)**2+(y+(lane_border_min-lane_offset_y))**2)
+    radius_ego=cs.sqrt((x-center[0])**2+(y-center[1])**2)
     # Googla x^3 så ser du att den börjar öka vid ca 5-10.
     # multiplicera dist_ymin med 10 så börjar den vid 0.5-1 ist
     dist_ymin=(lane1-radius_ego)*12 
@@ -32,7 +31,6 @@ def cone_constraint(c, x_obs, y_obs, r_cone, uk, x, y, theta, passed_obs):
     skip_due_far_away=cs.if_else(cs.sqrt((x_obs-x)**2 - (y_obs-y)**2)<10,False,True)
     deactivate_cone=cs.if_else(passed_obs,True,skip_due_far_away)
     c += cs.if_else(deactivate_cone,0,cs.fmax(0.0, cone))
-
     return c,False
 
 
@@ -42,8 +40,12 @@ def build_opt():
     (x, y, theta) = (p[0], p[1], p[2])
     ukm1 = [p[3], p[4]]
     (xref, yref, thetaref) = (p[5], p[6], p[7])
+    
     (X_OBS, Y_OBS, THETA_OBS, V_OBS, Y_LANE_OBS, R_CONE) = ([p[8], p[9]], [p[10], p[11]], [p[12], p[13]],[p[14], p[15]],[p[16], p[17]],[p[18], p[19]])
     actv_lane = p[20]
+    # (X_OBS, Y_OBS, THETA_OBS, V_OBS, Y_LANE_OBS, R_CONE) = ([p[8], p[9],p[10]],   [p[11], p[12],p[13]],   [p[14], p[15],p[16]],   [p[17], p[18],p[19]],   [p[20], p[21], p[22]], [p[23], p[24], p[25]])
+    # actv_lane = p[26]
+    
     c = stage_cost = lane_cost = jerk_cost = 0
     # close_to_obs=cs.if_else(cs.sqrt((X_OBS[0]-x)**2 - (Y_OBS[0]-y)**2)<10,True,False)
     # close_obs_cost += cs.if_else(close_to_obs,cs.fmax(0.0, 1000*(R_OBS[0] - cs.sqrt((X_OBS[0]-x_t)**2 + (Y_OBS[0]-y_t)**2))**2),0)
@@ -57,17 +59,14 @@ def build_opt():
         (xkm1,ykm1)=(x,y)
         (x, y, theta) = model_dd(x, y, theta, uk[0], uk[1])
         CONE_DEACTIVATED=[]
-        W_OBS=[0,0] # TODO
         for j in range(len(X_OBS)):
             # obstacles handeling
             ego_dist = cs.sqrt((x-xref)**2+(y-yref)**2)
             obs_dist = cs.sqrt((X_OBS[j]-xref)**2+(Y_OBS[j]-yref)**2)
             passed_obs=cs.if_else(obs_dist>ego_dist ,True,False)
             v_tan=get_tang_v_ego(uk[0],x,y,theta)
-            t_impact,arc=get_intersection_time(x,x,v_tan,X_OBS[j],Y_OBS[j],V_OBS[j])
-            x_impact,y_impact,THETA_OBS[j],W_OBS[j]=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],t_impact)
-
-
+            t_impact=get_intersection_time(x,x,v_tan,X_OBS[j],Y_OBS[j],V_OBS[j],Y_LANE_OBS[j])
+            x_impact,y_impact,THETA_OBS[j]=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],t_impact)
             c ,cone_deactivated= cone_constraint(c, x_impact, y_impact, R_CONE[j], uk, x, y, theta, passed_obs)
             CONE_DEACTIVATED.append(cone_deactivated)
         lane_cost = lane_keeping(lane_cost, y,x,actv_lane,yref,CONE_DEACTIVATED)

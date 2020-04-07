@@ -8,7 +8,8 @@ ts = 2
 (nu, nx, nref, nu_init, n_actv_lane, N) = (2, 3, 3, 2, 1, 15)
 ts_lst=[ts]*N
 ntraj = 3*N
-nObs = (6*2)
+nobs=2
+nObs = (6*nobs)
 (Qx, Qy, Qtheta) = (10, 10, 0)
 (Rv, Rw) = (1, 1)
 (Rvj, Rwj) = (5, 5)
@@ -17,7 +18,7 @@ nObs = (6*2)
 (dv, dw) = (0.05, 0.05)
 (Qtx, Qty, Qttheta) = (100, 100, 100)
 u_opt = [0.0] * (nu*N)
-W_OBS = [0,0]
+max_pred_dist=ts*vmax*N+int(N*0.33)
 # ------- run_opt stuff
 plot_history = [[], []]
 plt_x = [-1, 41]
@@ -56,18 +57,21 @@ def get_tang_v_ego(v,x,y,th):
     v_tan=(v-cs.sqrt(vb**2))
     return v_tan
 
-def get_intersection_time(x,y,v,x_obs,y_obs,v_obs):
+def get_intersection_time(x,y,v,x_obs,y_obs,v_obs,lane):
     v_obs=-v_obs
+    radius_ego=cs.sqrt((x-center[0])**2+(y-center[1])**2)
+    radius_obs = road_radius_frm_lane(lane)
+    radius_avg=cs.if_else(radius_ego>radius_obs,radius_obs+(radius_ego-radius_obs),radius_obs-(radius_ego-radius_obs))
     (x,y)=(x-center[0],y-center[1])
     (x_obs,y_obs)=(x_obs-center[0],y_obs-center[1])
     th_ego=cs.atan2(y,x)
     th_obs=cs.atan2(y_obs,x_obs)
     th=cs.sqrt((th_obs-th_ego)**2)
-    arc=center_of_road*th
+    arc=radius_avg*th
     t_impact=arc/(v+v_obs)
-    return t_impact,arc
+    return t_impact
 
-def obs_move_line(lane, v, x, y,theta,dt): #TODO update theta at init
+def obs_move_line(lane, v, x, y,dt): #TODO update theta at init
     v = -v
     radius = road_radius_frm_lane(lane)
     x_displaced = x-center[0]
@@ -79,9 +83,7 @@ def obs_move_line(lane, v, x, y,theta,dt): #TODO update theta at init
     y_displaced = radius*np.sin(th_new)
     x = x_displaced+center[0]
     y = y_displaced+center[1]
-    theta=th_new
-    w=(th_new-curr_th)/dt #TODO which is the right way?
-    return x, y,theta,w
+    return x, y,th_new
 
 def check_converged(X,Y,avrage_curve_fit_error,x_init,y_init,xref,yref):
     xdata=np.array(X) #TODO if close to ref not working (deactivate)
@@ -120,7 +122,6 @@ def model_dd(x, y, theta, v, w):
     return x, y, theta
 
 def get_curvature_plots():
-    global linewidth, lines, lane_offset_y, lenght
     plot_x_curv = {}
     plot_y_curv = {}
     th_lst = []
@@ -151,14 +152,36 @@ plot_x_curv, plot_y_curv = get_curvature_plots()
 
 
 def road_radius_frm_lane(lane):
-    global road_radius, linewidth
     radius = (road_radius-linewidth/2)+lane*linewidth
     return radius
 
 
 def get_y_from_lane(lane, x):
-    global plot_x_curv, plot_y_curv
     x_val_in_list = min(plot_x_curv[lane-1], key=lambda i: abs(i-x))
     idx = plot_x_curv[lane-1].index(x_val_in_list)
     y = plot_y_curv[lane-1][idx]+linewidth/2
     return y
+
+def move_ref_point(x,y,xref_final,yref_final,lane):
+    x_displaced = x-center[0]
+    y_displaced = y-center[1]
+    curr_th = np.arccos(x_displaced/(np.linalg.norm([x_displaced, y_displaced])))
+    radius_ref=road_radius_frm_lane(lane)
+    x_ego_ref_lane=np.cos(curr_th)*radius_ref
+    y_ego_ref_lane=np.sin(curr_th)*radius_ref
+    th_new = curr_th-max_pred_dist/radius_ref
+    x_ego_ref_lane = radius_ref*np.cos(th_new)
+    y_ego_ref_lane = radius_ref*np.sin(th_new)
+    xref = x_ego_ref_lane+center[0]
+    yref = y_ego_ref_lane+center[1]
+    if xref_final<xref:
+        return xref_final,yref_final
+    return xref,yref
+
+
+def place_sudden_obs(x,y,x_obs,y_obs,lane):
+    y_obs_new=get_y_from_lane(lane, x)
+    dist_to_obs=np.sqrt((x-(-x_obs))**2+(y-y_obs_new)**2)
+    if dist_to_obs<7:
+        return -x_obs,y_obs_new,x,y
+    return x_obs,y_obs,-10,-10

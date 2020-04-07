@@ -59,9 +59,9 @@ extern/auto_casadi_cost.c(54): warning C4668: '__STDC_VERSION__' is not defined 
 extern/auto_casadi_cost.c(67): warning C4100: 'mem': unreferenced formal parameter
 extern/auto_casadi_cost.c(67): warning C4100: 'w': unreferenced formal parameter
 extern/auto_casadi_cost.c(67): warning C4100: 'iw': unreferenced formal parameter
-extern/auto_casadi_cost.c(4360): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_cost.c(4364): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_cost.c(4371): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(4778): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(4782): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_cost.c(4789): warning C4100: 'mem': unreferenced formal parameter
 exit code: 0
 running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_grad.o" "-c" "extern/auto_casadi_grad.c"
 auto_casadi_grad.c
@@ -70,9 +70,9 @@ extern/auto_casadi_grad.c(54): warning C4668: '__STDC_VERSION__' is not defined 
 extern/auto_casadi_grad.c(68): warning C4100: 'mem': unreferenced formal parameter
 extern/auto_casadi_grad.c(68): warning C4100: 'w': unreferenced formal parameter
 extern/auto_casadi_grad.c(68): warning C4100: 'iw': unreferenced formal parameter
-extern/auto_casadi_grad.c(8760): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_grad.c(8764): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_grad.c(8771): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(9568): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(9572): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_grad.c(9579): warning C4100: 'mem': unreferenced formal parameter
 exit code: 0
 running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/auto_casadi_mapping_f2.o" "-c" "extern/auto_casadi_mapping_f2.c"
 auto_casadi_mapping_f2.c
@@ -92,9 +92,9 @@ extern/auto_casadi_mapping_f1.c(51): warning C4668: '__STDC_VERSION__' is not de
 extern/auto_casadi_mapping_f1.c(65): warning C4100: 'mem': unreferenced formal parameter
 extern/auto_casadi_mapping_f1.c(65): warning C4100: 'w': unreferenced formal parameter
 extern/auto_casadi_mapping_f1.c(65): warning C4100: 'iw': unreferenced formal parameter
-extern/auto_casadi_mapping_f1.c(3690): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_mapping_f1.c(3694): warning C4100: 'mem': unreferenced formal parameter
-extern/auto_casadi_mapping_f1.c(3701): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(4109): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(4113): warning C4100: 'mem': unreferenced formal parameter
+extern/auto_casadi_mapping_f1.c(4120): warning C4100: 'mem': unreferenced formal parameter
 exit code: 0
 running: "C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\BuildTools\\VC\\Tools\\MSVC\\14.16.27023\\bin\\HostX64\\x64\\cl.exe" "-nologo" "-MD" "-Z7" "-Brepro" "-I" "src" "-W4" "-Wall" "-Foc:\\Skola\\MasterThesis\\Master-Thesis\\Mattias\\OpEn\\simulation_curvature_test\\optimizers\\ref_point\\tcp_iface\\target\\debug\\build\\icasadi-65e20b0a06ef4c18\\out\\extern/interface.o" "-c" "extern/interface.c"
 interface.c

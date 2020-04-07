@@ -6,21 +6,10 @@ from mpl_toolkits.axes_grid1 import host_subplot
 import matplotlib.animation as animation
 import math
 import time
+from scenarios import *
 
 # -------Init road
 plot_x_curv,plot_y_curv=get_curvature_plots()
-# -------Init ego
-(x_init,init_lane, theta_init,r_ego) = (0,1, 0,0.26)
-(xref, yref_num_line, thetaref) = (lenght, 1, 0)
-yref=get_y_from_lane(yref_num_line,xref)
-(v_init, w_init) = (vmax, 0)
-# -------Init Obstacles
-penalty_margin=0.3
-(X_OBS,Y_LANE_OBS, THETA_OBS, R_OBS) = ([30,15],[2,1] ,[math.pi,math.pi], [0.26,0.26])
-Y_OBS=[get_y_from_lane(Y_LANE_OBS[0],X_OBS[0]),get_y_from_lane(Y_LANE_OBS[1],X_OBS[1])]
-V_OBS=[-0.6,0.2]
-for j in range(2):
-    _,_,THETA_OBS[j],W_OBS[j]=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],ts)
 # -------Init static stuff
 R_CONE=[j+r_ego+penalty_margin for j in R_OBS]
 NOW_POS_OBS=[X_OBS,Y_OBS]
@@ -28,16 +17,17 @@ LAST_POS_OBS=NOW_POS_OBS.copy()
 fig = plt.figure(figsize=(10,5))
 ax = fig.add_subplot(2, 1, 1)
 ax2 = fig.add_subplot(2, 1, 2)
-yref_radius=road_radius_frm_lane(yref_num_line)
+yref_radius=road_radius_frm_lane(ref_init_lane)
 mng = og.tcp.OptimizerTcpManager('optimizers/ref_point')
 mng.start()
 y_init=get_y_from_lane(init_lane,x_init) #plot_y_curv[init_lane-1][0]+linewidth/2
+theta_init = get_angle_from_lane(init_lane,x_init,y_init)
 print('[Collision inactivated]')
 
 def calc_obs_v_est(LAST_POS_OBS,NOW_POS_OBS):
     global last_time
     V_OBS_EST=[]
-    for i in range(2):
+    for i in range(len(X_OBS)):
         dist=np.sqrt(np.power(LAST_POS_OBS[0][i]-NOW_POS_OBS[0][i],2)+np.power(LAST_POS_OBS[1][i]-NOW_POS_OBS[1][i],2))
         dt=time.time()-last_time
         last_time=time.time()
@@ -47,15 +37,6 @@ def calc_obs_v_est(LAST_POS_OBS,NOW_POS_OBS):
     LAST_POS_OBS=[X_OBS_tlf,Y_OBS_tlf]
     return V_OBS_EST,LAST_POS_OBS
 
-def calculate_turn_dir(angle_ego):
-    angle_ego = np.degrees(angle_ego)
-    angle_ref = math.degrees(math.atan2(
-        yref-y_init, xref-x_init))  # check this one!
-    clws_angle_ref = angle_ref if angle_ref >= 0 else 180+abs(180+angle_ref)
-    if abs(clws_angle_ref-angle_ego) >= 180:
-        return -ts*dw
-    else:
-        return ts*dw
 
 def calculate_position_frm_u_opt(u_opt,n,Ts):
     uv = u_opt[0:nu*n:2]
@@ -113,9 +94,11 @@ def animate(i):
     ax2.plot(np.array(X), curve_fit_func(np.array(X), *popt), 'r-',
             label='fit: a=%5.3f, b=%5.3f, c=%5.3f,d=%5.3f,e=%5.3f' % tuple(popt))
     ax2.text(0.95, 0.01, round(curve_fit_error,1), verticalalignment='bottom', horizontalalignment='right', transform=ax2.transAxes, color='black', fontsize=15)
-    for j in range(2):
-        ax.add_patch(plt.Circle((np.array(x_impact[j]),np.array(y_impact[j])), 0.2, color='y'))
-    
+    for j in range(len(X_OBS)):
+        ax.add_patch(plt.Circle((np.array(x_impact[j]),np.array(y_impact[j])), 0.2, color='k'))
+    if sudden_obs and X_OBS[0]<0:
+        ax.add_patch(plt.Circle((x_sudden_decect,y_sudden_decect), 0.2, color='b'))
+
 i=-1
 avrage_curve_fit_error=[]
 print_cone=True
@@ -134,6 +117,7 @@ while i<200:
     i+=1
     if close_to_target:
         break
+    xref, yref=move_ref_point(x_init,y_init,xref_final,yref_final,ref_init_lane)
     V_OBS_EST,LAST_POS_OBS=calc_obs_v_est(LAST_POS_OBS,NOW_POS_OBS)
     plot_history[0].append(x_init)
     plot_history[1].append(y_init)
@@ -150,7 +134,6 @@ while i<200:
         solution = mng.call(p_lst, initial_guess=u_opt)
         try:
             u_opt = solution['solution']
-            # print(solution['penalty'])
         except:
             print('[No Solution]')
             continue
@@ -194,7 +177,7 @@ while i<200:
 
     dt = ts if not run_vel_obs else dt_lst[backup_idx-1] # since VO changes dt we must do the same for obs
     for j in range(len(X_OBS)):
-        (X_OBS[j], Y_OBS[j],THETA_OBS[j],W_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],dt)
+        (X_OBS[j], Y_OBS[j],THETA_OBS[j])=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],dt)
     NOW_POS_OBS=(X_OBS,Y_OBS)
     # check convergense
     converged,avrage_curve_fit_error,curve_fit_error,popt=check_converged(X,Y,avrage_curve_fit_error,x_init,y_init,xref,yref)
@@ -226,20 +209,17 @@ while i<200:
                     print_cone_const(X_OBS[j], Y_OBS[j],THETA_OBS[j], V_OBS[j], R_OBS[j], uv[backup_idx-2], X[i], Y[i], THETA[i])
             # break
     (x_impact,y_impact)=([],[])
-    for j in range(2):
+    for j in range(len(X_OBS)):
         v_tan=get_tang_v_ego(v_init,x_init,y_init,theta_init)
-        t_impact,arc=get_intersection_time(x_init,y_init,v_tan,X_OBS[j],Y_OBS[j],W_OBS[j])
-        print(arc)
-        x_imp,y_imp,_,_=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],t_impact)
+        t_impact=get_intersection_time(x_init,y_init,v_tan,X_OBS[j],Y_OBS[j],V_OBS[j],Y_LANE_OBS[j])
+        x_imp,y_imp,_=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],t_impact)
         x_impact.append(x_imp)
         y_impact.append(y_imp)
-    
-    # if not close_to_target and not converged and not collision:
-    #     theta_init += calculate_turn_dir(theta_init)
-    #     print('TURNING')
+    if sudden_obs and X_OBS[0]<0:
+        X_OBS[0],Y_OBS[0],x_sudden_decect,y_sudden_decect=place_sudden_obs(x_init,y_init,X_OBS[0],Y_OBS[0],Y_LANE_OBS[0])
     total_sec += solution['solve_time_ms']/1000
     ani = animation.FuncAnimation(fig, animate, interval=100000)
-    plt.pause(0.0001)
+    plt.pause(0.001)
 print('total_sec', total_sec)
 print('avrage_curve_fit_error',round(sum(avrage_curve_fit_error)/len(avrage_curve_fit_error),1),round(min(avrage_curve_fit_error),1),round(max(avrage_curve_fit_error),1))
 print('avrage time_ms',total_sec*1000/i)
