@@ -12,7 +12,7 @@ nObs = (6*2)
 (Qx, Qy, Qtheta) = (10, 10, 0)
 (Rv, Rw) = (1, 1)
 (Rvj, Rwj) = (5, 5)
-(vmin, vmax) = (0.01, 0.5)
+(vmin, vmax) = (0.1, 0.5)
 (wmin, wmax) = (-3, 3)
 (dv, dw) = (0.05, 0.05)
 (Qtx, Qty, Qttheta) = (100, 100, 100)
@@ -47,14 +47,13 @@ lane2 = lane1+linewidth
 center=[lane_offset_x,lane_offset_y-lane_border_min]
 # ----- Methods
 
-def get_tangent_vel(v,x,y,th):
-    vx= v*cs.cos(th)
-    vy= v*cs.sin(th)
-    v = cs.vertcat(-vx,-vy)
-    p= cs.vertcat(x-center[0],y-center[1])
-    b_hat=p/cs.norm_2(p)
-    vb=cs.dot(v,b_hat)
-    v_tan=(cs.norm_2(v)-cs.sqrt(vb**2))
+def get_tang_v_ego(v,x,y,th):
+    vx= -v*cs.cos(th)
+    vy= -v*cs.sin(th)
+    b_hat_x=(x-center[0])/cs.sqrt((x-center[0])**2+(y-center[1])**2)
+    b_hat_y=(y-center[1])/cs.sqrt((x-center[0])**2+(y-center[1])**2)
+    vb=vx*b_hat_x+vy*b_hat_y
+    v_tan=(v-cs.sqrt(vb**2))
     return v_tan
 
 def get_intersection_time(x,y,v,x_obs,y_obs,v_obs):
@@ -66,7 +65,7 @@ def get_intersection_time(x,y,v,x_obs,y_obs,v_obs):
     th=cs.sqrt((th_obs-th_ego)**2)
     arc=center_of_road*th
     t_impact=arc/(v+v_obs)
-    return t_impact
+    return t_impact,arc
 
 def obs_move_line(lane, v, x, y,theta,dt): #TODO update theta at init
     v = -v

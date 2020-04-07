@@ -114,7 +114,7 @@ def animate(i):
             label='fit: a=%5.3f, b=%5.3f, c=%5.3f,d=%5.3f,e=%5.3f' % tuple(popt))
     ax2.text(0.95, 0.01, round(curve_fit_error,1), verticalalignment='bottom', horizontalalignment='right', transform=ax2.transAxes, color='black', fontsize=15)
     for j in range(2):
-        ax.add_patch(plt.Circle((np.array(x_impact[j])[0][0],np.array(y_impact[j])[0][0]), 0.2, color='y'))
+        ax.add_patch(plt.Circle((np.array(x_impact[j]),np.array(y_impact[j])), 0.2, color='y'))
     
 i=-1
 avrage_curve_fit_error=[]
@@ -146,7 +146,7 @@ while i<200:
             p_lst.extend(lst)
         actv_lane=yref_radius
         p_lst.append(actv_lane)
-        u_opt=[0.0] * (nu*N) if not warm_start else u_opt
+        u_opt=[0.1] * (nu*N) if not warm_start else u_opt
         solution = mng.call(p_lst, initial_guess=u_opt)
         try:
             u_opt = solution['solution']
@@ -227,10 +227,9 @@ while i<200:
             # break
     (x_impact,y_impact)=([],[])
     for j in range(2):
-        w_ego=get_tangent_vel(v_init,x_init,y_init,theta_init)
-        t_impact=get_intersection_time(x_init,y_init,w_ego,X_OBS[j],Y_OBS[j],V_OBS[j])
-        print(t_impact)
-        print('-------')
+        v_tan=get_tang_v_ego(v_init,x_init,y_init,theta_init)
+        t_impact,arc=get_intersection_time(x_init,y_init,v_tan,X_OBS[j],Y_OBS[j],W_OBS[j])
+        print(arc)
         x_imp,y_imp,_,_=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],t_impact)
         x_impact.append(x_imp)
         y_impact.append(y_imp)

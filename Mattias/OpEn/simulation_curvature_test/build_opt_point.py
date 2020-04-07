@@ -63,8 +63,8 @@ def build_opt():
             ego_dist = cs.sqrt((x-xref)**2+(y-yref)**2)
             obs_dist = cs.sqrt((X_OBS[j]-xref)**2+(Y_OBS[j]-yref)**2)
             passed_obs=cs.if_else(obs_dist>ego_dist ,True,False)
-            w_ego=get_tangent_vel(uk[0],x,y,theta)
-            t_impact=get_intersection_time(x,x,w_ego,X_OBS[j],Y_OBS[j],V_OBS[j])
+            v_tan=get_tang_v_ego(uk[0],x,y,theta)
+            t_impact,arc=get_intersection_time(x,x,v_tan,X_OBS[j],Y_OBS[j],V_OBS[j])
             x_impact,y_impact,THETA_OBS[j],W_OBS[j]=obs_move_line(Y_LANE_OBS[j],V_OBS[j],X_OBS[j], Y_OBS[j],THETA_OBS[j],t_impact)
 
 
